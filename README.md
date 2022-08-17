@@ -1,8 +1,6 @@
 # -DB1-Proyecto1_Carnet
 
 
-  <img alt="SQL" src="https://img.shields.io/badge/-SQL-DD0031?style=flat-square&logo=SQL&logoColor=green" />
-
   
 ## 🥇🥇🥇🤗🤗🤗  Bienvenid@ a mi Proyecto #1  🤗🤗🤗🥇🥇🥇 
 En la tienda “El buen samaritano” le solicita realizar una serie de reportes en base a la información que poseen. La empresa ha utilizado un archivo de Excel para 
