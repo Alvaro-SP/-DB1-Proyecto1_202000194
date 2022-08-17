@@ -1,7 +1,7 @@
 # -DB1-Proyecto1_Carnet
 
 
-  <img alt="SQL" src="https://img.shields.io/badge/-Java-DD0031?style=flat-square&logo=Java&logoColor=green" />
+  <img alt="SQL" src="https://img.shields.io/badge/-Sql-DD0031?style=flat-square&logo=Java&logoColor=green" />
 
   
 ## 🥇🥇🥇🤗🤗🤗  Bienvenid@ a mi Proyecto #1  🤗🤗🤗🥇🥇🥇 
