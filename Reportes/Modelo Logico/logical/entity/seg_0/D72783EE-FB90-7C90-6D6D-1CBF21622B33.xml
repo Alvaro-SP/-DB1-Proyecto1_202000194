@@ -1,0 +1,101 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="D72783EE-FB90-7C90-6D6D-1CBF21622B33" name="OrdenProducto">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:48:44 UTC</createdTime>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id_OrdenProducto" id="6E7246B5-9DA1-4694-8904-3B322DDF557A">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:48:59 UTC</createdTime>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id_Orden" id="64567335-C1A5-17F4-4FDE-C96EFEB30509">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:49:11 UTC</createdTime>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nombre_Producto" id="CA16847D-DB39-6663-6BF2-77F40F63238F">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:52:05 UTC</createdTime>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>100 CHAR</dataTypeSize>
+<ownDataTypeParameters>100 CHAR,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="orden" id="C64C62AF-2AE6-5D8F-0D2B-95110B8B964C">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:58:41 UTC</createdTime>
+<generatorID>631A6500-1A5B-315B-7564-0BECC326FD96</generatorID>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<referedAttribute>43797C37-C4D1-FFA6-272C-BAEAABC8C725</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nombre_Producto1" id="EBF52008-D178-4BC3-E152-2B8FE52442F0">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:59:11 UTC</createdTime>
+<generatorID>BE4181C0-7A03-BB3D-6750-A6E400D21A4B</generatorID>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<referedAttribute>4DE15C99-4D71-3BE4-9312-3049CE4E5B0A</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>100 CHAR</dataTypeSize>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="ECFCC9CF-4B6B-F122-618D-E19AF45FA7BF" name="OrdenProducto PK">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-08-17 23:54:15 UTC</createdTime>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>6E7246B5-9DA1-4694-8904-3B322DDF557A</attributeRef>
+<attributeRef>C64C62AF-2AE6-5D8F-0D2B-95110B8B964C</attributeRef>
+<attributeRef>EBF52008-D178-4BC3-E152-2B8FE52442F0</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>
