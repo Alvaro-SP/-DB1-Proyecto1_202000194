@@ -129,18 +129,83 @@ SELECT * FROM
 --! 6. Mostrar la categoría que más y menos se ha comprado. Debe de mostrar el 
 --! nombre de la categoría y cantidad de unidades. (Una sola consulta).
 
+SELECT name_category, cant FROM
+(
+    (
+        -- EL QUE MAS HA COMPRADO
+        SELECT categoria.nombre as name_category,
+        SUM(Productos_has_Orden.cantidad) as cant
+        FROM Productos_has_Orden
+        JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+        JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
+        GROUP BY name_category ORDER BY cant DESC LIMIT 1
+
+    )
+    UNION ALL
+    (
+        -- EL QUE MENOS HA COMPRADO
+        SELECT categoria.nombre as name_category,
+        SUM(Productos_has_Orden.cantidad) as cant
+        FROM Productos_has_Orden
+        JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+        JOIN categoria ON Productos.id_producto = categoria.id_categoria
+        GROUP BY name_category ORDER BY cant ASC LIMIT 1
+    )
+)as C6;
 
 --! 7. Mostrar la categoría más comprada por cada país. Se debe de mostrar el 
 --! nombre del país, nombre de la categoría y cantidad de unidades.
-
+SELECT Pais.nombre, categoria.nombre,
+SUM(cantidad) as cantidad FROM Productos_has_Orden
+JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
+JOIN Vendedor ON Vendedor.idVendedor = Productos_has_Orden.Vendedor_idVendedor
+JOIN Pais ON Pais.id_pais = Vendedor.id_pais
+GROUP BY Pais.nombre, categoria.nombre ORDER BY Pais.nombre, cantidad DESC;
 
 --! 8. Mostrar las ventas por mes de Inglaterra. Debe de mostrar el número del mes 
 --! y el monto.
 
+SELECT MONTH(Orden.fecha_orden) as mes,
+SUM(Productos_has_Orden.cantidad * Productos.precio) as monto
+FROM Productos_has_Orden
+JOIN Orden ON Orden.id_orden = Productos_has_Orden.Orden_idOrden
+JOIN Vendedor ON Vendedor.idVendedor = Productos_has_Orden.Vendedor_idVendedor
+JOIN Pais ON Pais.id_pais = Vendedor.id_pais
+JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+WHERE Pais.nombre = 'Inglaterra'
+GROUP BY mes;
 
 --! 9. Mostrar el mes con más y menos ventas. Se debe de mostrar el número de 
 --! mes y monto. (Una sola consulta).
 
+SELECT mes, monto FROM
+(
+    (
+        SELECT MONTH(Orden.fecha_orden) AS mes,
+        ROUND(SUM((Productos_has_Orden.cantidad * Productos.precio)),2) AS monto 
+        FROM Productos_has_Orden
+        JOIN Orden ON Orden.id_orden = Productos_has_Orden.Orden_idOrden
+        JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+        GROUP BY mes ORDER BY monto DESC LIMIT 1
+    )
+    UNION ALL
+    (
+        SELECT MONTH(Orden.fecha_orden) AS mes,
+        ROUND(SUM((Productos_has_Orden.cantidad * Productos.precio)),2) AS monto 
+        FROM Productos_has_Orden
+        JOIN Orden ON Orden.id_orden = Productos_has_Orden.Orden_idOrden
+        JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+        GROUP BY mes ORDER BY monto ASC LIMIT 1
+    )
+) AS c9;
 
 --! 10.Mostrar las ventas de cada producto de la categoría deportes. Se debe de 
 --! mostrar el id del producto, nombre y monto.
+
+SELECT (Productos.id_producto) AS id_producto, (Productos.nombre) AS nombre,
+ROUND(SUM((Productos_has_Orden.cantidad * Productos.precio)),2) AS monto FROM Productos_has_Orden
+JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
+WHERE categoria.nombre LIKE 'Deportes'
+GROUP BY id_producto;
