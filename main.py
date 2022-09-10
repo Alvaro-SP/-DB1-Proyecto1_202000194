@@ -152,7 +152,7 @@ def uno():
             for fila in result:
                 atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'1Cliente_Mas_Compra': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -208,7 +208,7 @@ def dos():
             for fila in result:
                 atributos = {'ID_PRODUCTO': fila[0], 'NOMBRE_PRODUCTO' : fila[1], 'NOMBRE_CATEGORIA' : fila[2], 'CANTIDAD' : fila[3], 'MONTO_TOTAL' : fila[3]}
                 templist.append(atributos)
-            return jsonify({'PRODUCTO_MAS_MENOS_COMPRADO': templist})
+            return jsonify({'2PRODUCTO_MAS_MENOS_COMPRADO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -238,7 +238,7 @@ def tres():
             for fila in result:
                 atributos = {'ID_VENDEDOR': fila[0], 'NOMBRE' : fila[1], 'MONTO_TOTAL_VENDIDO' : fila[2]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'3PERSONA_MAS_VENDIO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -283,9 +283,9 @@ def cuatro():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'NOMBRE_PAIS': fila[0], 'MONTO_VENDIDO' : fila[1]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'4PAIS_MAS_MENOS_VENDIDO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -320,9 +320,9 @@ def cinco():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'ID_PAIS': fila[0], 'NOMBRE_PAIS' : fila[1], 'MONTO_VENDIDO' : fila[2]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'5PAIS_MAS_COMPRO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -364,9 +364,9 @@ def seis():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'NAME_CATEGORY': fila[0], 'CANTIDAD' : fila[1]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'6CATEGORIA_MAS_MENOS_COMPRA': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -392,9 +392,9 @@ def siete():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'NOMBRE_PAIS': fila[0], 'NOMBRE_CATEGORIA' : fila[1], 'CANTIDAD' : fila[2]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'7CATETORIA_PAIS_MAS_COMPRA': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -422,9 +422,9 @@ def ocho():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'MES': fila[0], 'MONTO_TOTAL' : fila[1]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'8VENTAS_POR_MES': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -463,9 +463,9 @@ def nueve():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'MES': fila[0], 'MONTO_VENDIDO' : fila[1]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'9MES_MAS_MENOS_VENTAS': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
@@ -491,9 +491,9 @@ def diez():
             print(result)
             templist = []
             for fila in result:
-                atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
+                atributos = {'ID_PRODUCTO': fila[0], 'NOMBRE' : fila[1], 'MONTO_TOTAL' : fila[2]}
                 templist.append(atributos)
-            return jsonify({'Cliente_Mas_Compra': templist})
+            return jsonify({'10VENTAS_PRODUCTO_DEPORTES': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
     finally:
