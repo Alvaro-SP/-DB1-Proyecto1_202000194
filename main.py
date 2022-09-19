@@ -11,45 +11,46 @@ import pymysql
 import pandas as pd
 import json
 list = [];
-
+categoria = []
+cliente = []
+orden = []
+pais = []
+producto = []
+vendedor = []
 #! ████████████████████████ WELCOME TO MY PROJECT ████████████████████████
-#* █████████████████████TOMANDO EL ARCHIVO EXCEL:█████████████████████
-rootPath = os.getcwd()
-rootPath=rootPath+"\\TestFile\\"
-loc = (rootPath+"DB_Excel.xlsx")
-#* █████████████████████ TOMAR LOS DATOS DEL EXCEL: █████████████████████
+def takeEXCEL():
+    global categoria,cliente,orden,pais,producto,vendedor
+    #* █████████████████████TOMANDO EL ARCHIVO EXCEL:█████████████████████
+    rootPath = os.getcwd()
+    rootPath=rootPath+"\\TestFile\\"
+    loc = (rootPath+"DB_Excel.xlsx")
+    #* █████████████████████ TOMAR LOS DATOS DEL EXCEL: █████████████████████
 
-# Tomo en varios DataFrames to Lists
-df_categoria=pd.read_excel(open(loc, 'rb'),sheet_name=0)
-categoria = df_categoria.values.tolist()
+    # Tomo en varios DataFrames to Lists
+    df_categoria=pd.read_excel(open(loc, 'rb'),sheet_name=0)
+    categoria = df_categoria.values.tolist()
 
-df_cliente=pd.read_excel(open(loc, 'rb'),sheet_name=1)
-cliente = df_cliente.values.tolist()
+    df_cliente=pd.read_excel(open(loc, 'rb'),sheet_name=1)
+    cliente = df_cliente.values.tolist()
 
-df_orden=pd.read_excel(open(loc, 'rb'),sheet_name=2)
-orden = df_orden.values.tolist()
+    df_orden=pd.read_excel(open(loc, 'rb'),sheet_name=2)
+    orden = df_orden.values.tolist()
 
-df_pais=pd.read_excel(open(loc, 'rb'),sheet_name=3)
-pais = df_pais.values.tolist()
+    df_pais=pd.read_excel(open(loc, 'rb'),sheet_name=3)
+    pais = df_pais.values.tolist()
 
-df_producto=pd.read_excel(open(loc, 'rb'),sheet_name=4)
-producto = df_producto.values.tolist()
+    df_producto=pd.read_excel(open(loc, 'rb'),sheet_name=4)
+    producto = df_producto.values.tolist()
 
-df_vendedor=pd.read_excel(open(loc, 'rb'),sheet_name=5)
-vendedor = df_vendedor.values.tolist()
+    df_vendedor=pd.read_excel(open(loc, 'rb'),sheet_name=5)
+    vendedor = df_vendedor.values.tolist()
 
 
 #* █████████████████████ CONNECT WITH DATABASE:█████████████████████
 
-connection = pymysql.connect(host='localhost',
-                            user='root',
-                            password='2412',
-                            db='mydb')
+connection = pymysql.connect(host='localhost',user='root',password='2412',db='mydb')
                             # charset='utf8mb4',
                             # cursorclass=pymysql.cursors.DictCursro
-
-
-
 
 #* █████████████████████ INSERT ALL DATA IN MYSQL MOTOR: █████████████████████
 def BulkInsert():
@@ -147,7 +148,7 @@ def uno():
             '''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'ID': fila[0], 'NOMBRE' : fila[1], 'PAIS' : fila[2], 'TOTAL' : fila[3]}
@@ -155,8 +156,8 @@ def uno():
             return jsonify({'1Cliente_Mas_Compra': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+        # connection.close()
 
 
 #?  ██████████████████    2    █████████████████████
@@ -169,8 +170,40 @@ def dos():
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = '''
-            SELECT id_producto, nameProduct, nameCategoria, cantidad, Monto_Total FROM
+            # sql = '''
+            # SELECT id_producto, nameProduct, nameCategoria, cantidad, Monto_Total FROM
+            # (
+            #     (
+            #         -- EL MAS COMPRADO:
+            #         SELECT
+            #             Productos.id_producto as id_producto,
+            #             Productos.nombre as nameProduct,
+            #             categoria.nombre as nameCategoria,
+            #             SUM(cantidad) as cantidad,
+            #             SUM(cantidad * Productos.precio) as Monto_Total
+            #         FROM Productos_has_Orden
+            #         JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+            #         JOIN categoria ON categoria.id_categoria = Productos.categoria_id_categoria
+            #         GROUP BY id_producto ORDER BY cantidad DESC LIMIT 1
+            #     )
+            #     UNION ALL
+            #     (
+            #         -- EL MENOS COMPRADO:
+            #         SELECT
+            #             Productos.id_producto as id_producto,
+            #             Productos.nombre as nameProduct,
+            #             categoria.nombre as nameCategoria,
+            #             SUM(cantidad) as cantidad,
+            #             SUM(Productos_has_Orden.cantidad * Productos.precio) as Monto_Total
+            #         FROM Productos_has_Orden
+            #         JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
+            #         JOIN categoria ON categoria.id_categoria = Productos.categoria_id_categoria
+            #         GROUP BY id_producto ORDER BY cantidad ASC LIMIT 1
+            #     )
+            # )as c2;
+            # '''
+            sql='''
+            SELECT id_producto, nameProduct, nameCategoria, cantidad, monto FROM
             (
                 (
                     -- EL MAS COMPRADO:
@@ -179,11 +212,11 @@ def dos():
                         Productos.nombre as nameProduct,
                         categoria.nombre as nameCategoria,
                         SUM(cantidad) as cantidad,
-                        SUM(cantidad * Productos.precio) as Monto_Total
+                        ROUND(SUM(Productos_has_Orden.cantidad * Productos.precio),2) as monto
                     FROM Productos_has_Orden
                     JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
                     JOIN categoria ON categoria.id_categoria = Productos.categoria_id_categoria
-                    GROUP BY id_producto ORDER BY cantidad DESC LIMIT 1
+                    GROUP BY id_producto ORDER BY monto ASC LIMIT 1
                 )
                 UNION ALL
                 (
@@ -193,26 +226,25 @@ def dos():
                         Productos.nombre as nameProduct,
                         categoria.nombre as nameCategoria,
                         SUM(cantidad) as cantidad,
-                        SUM(Productos_has_Orden.cantidad * Productos.precio) as Monto_Total
+                        ROUND(SUM(Productos_has_Orden.cantidad * Productos.precio),2) as monto
                     FROM Productos_has_Orden
                     JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
                     JOIN categoria ON categoria.id_categoria = Productos.categoria_id_categoria
-                    GROUP BY id_producto ORDER BY cantidad ASC LIMIT 1
+                    GROUP BY id_producto ORDER BY cantidad  desc LIMIT 1
                 )
-            )as c2;
-            '''
+            )as c2;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
-                atributos = {'ID_PRODUCTO': fila[0], 'NOMBRE_PRODUCTO' : fila[1], 'NOMBRE_CATEGORIA' : fila[2], 'CANTIDAD' : fila[3], 'MONTO_TOTAL' : fila[3]}
+                atributos = {'ID_PRODUCTO': fila[0], 'NOMBRE_PRODUCTO' : fila[1], 'NOMBRE_CATEGORIA' : fila[2], 'CANTIDAD' : fila[3], 'MONTO_TOTAL' : fila[4]}
                 templist.append(atributos)
             return jsonify({'2PRODUCTO_MAS_MENOS_COMPRADO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 3. Mostrar a la persona que más ha vendido. Se debe mostrar el id del 
 # vendedor, nombre del vendedor, monto total vendido.
 @app.route('/3', methods=['GET'])
@@ -233,7 +265,7 @@ def tres():
             '''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'ID_VENDEDOR': fila[0], 'NOMBRE' : fila[1], 'MONTO_TOTAL_VENDIDO' : fila[2]}
@@ -241,8 +273,8 @@ def tres():
             return jsonify({'3PERSONA_MAS_VENDIO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 4. Mostrar el país que más y menos ha vendido. Debe mostrar el nombre del 
 # país y el monto. (Una sola consulta).
 @app.route('/4', methods=['GET'])
@@ -280,7 +312,7 @@ def cuatro():
             )as c2;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'NOMBRE_PAIS': fila[0], 'MONTO_VENDIDO' : fila[1]}
@@ -288,8 +320,8 @@ def cuatro():
             return jsonify({'4PAIS_MAS_MENOS_VENDIDO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 5. Top 5 de países que más han comprado en orden ascendente. Se le solicita 
 # mostrar el id del país, nombre y monto total.
 @app.route('/5', methods=['GET'])
@@ -312,12 +344,12 @@ def cinco():
                     JOIN Orden ON Orden.id_orden = Productos_has_Orden.Orden_idOrden
                     JOIN Cliente ON Cliente.idCliente = Orden.id_cliente
                     JOIN Pais ON Pais.id_pais = Cliente.id_pais
-                    GROUP BY Pais.id_Pais ORDER BY Monto_Vendido DESC LIMIT 5
+                    GROUP BY Pais.id_Pais ORDER BY Monto_Vendido ASC LIMIT 5
                 )
-            )AS C5 ORDER BY Monto_Vendido ASC;'''
+            )AS C5 ORDER BY C5.Monto_Vendido ASC;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'ID_PAIS': fila[0], 'NOMBRE_PAIS' : fila[1], 'MONTO_VENDIDO' : fila[2]}
@@ -325,8 +357,8 @@ def cinco():
             return jsonify({'5PAIS_MAS_COMPRO': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 6. Mostrar la categoría que más y menos se ha comprado. Debe de mostrar el 
 # nombre de la categoría y cantidad de unidades. (Una sola consulta).
 @app.route('/6', methods=['GET'])
@@ -341,7 +373,7 @@ def seis():
                 (
                     -- EL QUE MAS HA COMPRADO
                     SELECT categoria.nombre as name_category,
-                    SUM(Productos_has_Orden.cantidad) as cant
+                    SUM(cantidad) as cant
                     FROM Productos_has_Orden
                     JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
                     JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
@@ -352,16 +384,16 @@ def seis():
                 (
                     -- EL QUE MENOS HA COMPRADO
                     SELECT categoria.nombre as name_category,
-                    SUM(Productos_has_Orden.cantidad) as cant
+                    SUM(cantidad) as cant
                     FROM Productos_has_Orden
                     JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
-                    JOIN categoria ON Productos.id_producto = categoria.id_categoria
+                    JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
                     GROUP BY name_category ORDER BY cant ASC LIMIT 1
                 )
             )as C6;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'NAME_CATEGORY': fila[0], 'CANTIDAD' : fila[1]}
@@ -369,8 +401,8 @@ def seis():
             return jsonify({'6CATEGORIA_MAS_MENOS_COMPRA': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 7. Mostrar la categoría más comprada por cada país. Se debe de mostrar el 
 # nombre del país, nombre de la categoría y cantidad de unidades.
 @app.route('/7', methods=['GET'])
@@ -378,18 +410,21 @@ def siete():
 
     try:
         with connection.cursor() as cursor:
-            # Read a single record
+            # Read a single record  JOIN Vendedor ON Vendedor.idVendedor = Productos_has_Orden.Vendedor_idVendedor
             sql = '''
-            SELECT Pais.nombre, categoria.nombre,
-            SUM(cantidad) as cantidad FROM Productos_has_Orden
+            SELECT * FROM(
+            SELECT (Pais.nombre) AS pais, (categoria.nombre) AS categoria,
+            SUM(cantidad) AS cantidad FROM Productos_has_Orden
             JOIN Productos ON Productos_has_Orden.Productos_id_producto = Productos.id_producto
             JOIN categoria ON Productos.categoria_id_categoria = categoria.id_categoria
-            JOIN Vendedor ON Vendedor.idVendedor = Productos_has_Orden.Vendedor_idVendedor
-            JOIN Pais ON Pais.id_pais = Vendedor.id_pais
-            GROUP BY Pais.nombre, categoria.nombre ORDER BY Pais.nombre, cantidad DESC;'''
+            JOIN Orden ON Orden.id_orden = Productos_has_Orden.Orden_idOrden
+            JOIN Cliente ON Cliente.idCliente = Orden.id_cliente
+            JOIN Pais ON Pais.id_pais = Cliente.id_pais
+            GROUP BY Pais.nombre, categoria.nombre ORDER BY  cantidad DESC
+            ) AS c7 GROUP BY c7.pais ORDER BY c7.cantidad ASC;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'NOMBRE_PAIS': fila[0], 'NOMBRE_CATEGORIA' : fila[1], 'CANTIDAD' : fila[2]}
@@ -397,8 +432,8 @@ def siete():
             return jsonify({'7CATETORIA_PAIS_MAS_COMPRA': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 8. Mostrar las ventas por mes de Inglaterra. Debe de mostrar el número del mes 
 # y el monto.
 @app.route('/8', methods=['GET'])
@@ -419,7 +454,7 @@ def ocho():
             GROUP BY mes;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'MES': fila[0], 'MONTO_TOTAL' : fila[1]}
@@ -427,8 +462,8 @@ def ocho():
             return jsonify({'8VENTAS_POR_MES': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 9. Mostrar el mes con más y menos ventas. Se debe de mostrar el número de 
 # mes y monto. (Una sola consulta).
 @app.route('/9', methods=['GET'])
@@ -460,7 +495,7 @@ def nueve():
             ) AS c9;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+             #print(result)
             templist = []
             for fila in result:
                 atributos = {'MES': fila[0], 'MONTO_VENDIDO' : fila[1]}
@@ -468,8 +503,8 @@ def nueve():
             return jsonify({'9MES_MAS_MENOS_VENTAS': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 # 10.Mostrar las ventas de cada producto de la categoría deportes. Se debe de 
 # mostrar el id del producto, nombre y monto.
 
@@ -488,7 +523,7 @@ def diez():
             GROUP BY id_producto;'''
             cursor.execute(sql)
             result = cursor.fetchall()
-            print(result)
+            # print(result)
             templist = []
             for fila in result:
                 atributos = {'ID_PRODUCTO': fila[0], 'NOMBRE' : fila[1], 'MONTO_TOTAL' : fila[2]}
@@ -496,8 +531,8 @@ def diez():
             return jsonify({'10VENTAS_PRODUCTO_DEPORTES': templist})
     except Exception as ex:
         return jsonify({'Error': 'Error en la consulta'})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 
 
 
@@ -516,7 +551,7 @@ def diez():
 #     except Exception as ex:
 #         return jsonify({'Error': 'Error en la consulta'})
 
-
-BulkInsert()
+# takeEXCEL()
+# BulkInsert()
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)

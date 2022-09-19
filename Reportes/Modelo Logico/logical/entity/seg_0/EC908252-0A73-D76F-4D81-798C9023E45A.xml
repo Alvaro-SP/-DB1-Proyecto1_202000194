@@ -66,6 +66,20 @@
 <dataTypeSize>100 CHAR</dataTypeSize>
 <ownDataTypeParameters>100 CHAR,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id_pais" id="F3F0E796-0422-0912-7557-3316D9CBE439">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-09-17 07:49:55 UTC</createdTime>
+<generatorID>5DD5A15E-7AF1-35E4-BAF1-C3E95C1118D0</generatorID>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<referedAttribute>F17D86D0-BF5A-0AE7-097A-F4F44C4603AC</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="309CC1B9-5B7B-52AB-B1D8-03F26F41C27C" name="Vendedor PK">

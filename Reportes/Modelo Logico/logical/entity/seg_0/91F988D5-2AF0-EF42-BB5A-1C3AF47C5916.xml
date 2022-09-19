@@ -141,6 +141,20 @@
 <dataTypeSize>100 CHAR</dataTypeSize>
 <ownDataTypeParameters>100 CHAR,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id_pais" id="B213285B-A3D9-5104-3F29-30276F0D0ED0">
+<createdBy>alvaro</createdBy>
+<createdTime>2022-09-17 07:49:49 UTC</createdTime>
+<generatorID>78728B51-1064-6BA1-EFE4-7D367B1934C9</generatorID>
+<ownerDesignName>Modelo Logico</ownerDesignName>
+<engineerTo>
+<item key="4938DF8B-8FBD-BF72-618D-C9932EAFEC96" value="true"/>
+</engineerTo>
+<referedAttribute>F17D86D0-BF5A-0AE7-097A-F4F44C4603AC</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="4C6CCD6A-0662-FAD9-1538-E2DE6A6DC1D8" name="Cliente PK">
